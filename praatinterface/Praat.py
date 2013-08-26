@@ -7,18 +7,32 @@ Created on 2012-11-09
 import subprocess
 import os
 
-from .scripts import praatscripts
+from scripts import praatscripts
 
 
 class PraatLoader:
-    def __init__(self,praatpath,debug=False):
+    def __init__(self,praatpath=None,debug=False,additional_scripts = {}):
         self.debug=debug
         self.scripts = praatscripts
-        self.script_dir = os.path.join(os.path.dirname(praatpath),'praatScripts')
-        self.praat = praatpath
+        self.scripts.update(additional_scripts)
+        if praatpath:
+            self.script_dir = os.path.join(os.path.dirname(praatpath),'praatScripts')
+            self.praat = 'praat'
+        else:
+            self.script_dir = os.path.join(os.path.dirname(__file__),'praatScripts')
+            self.praat = 'praat'
         self.init_scripts()
         if self.debug:
             self.initlog()
+        self.window_size = 0.025
+        self.preemphasis = 50
+
+    def reinit_scripts(self):
+        for s in self.scripts:
+            if os.path.isfile(os.path.join(self.script_dir,s)):
+                os.remove(os.path.join(self.script_dir,s))
+        os.rmdir(self.script_dir)
+        self.init_scripts()
 
     def init_scripts(self):
         if not os.path.isdir(self.script_dir):
@@ -37,11 +51,6 @@ class PraatLoader:
         with open(os.path.join(self.script_dir,'log.txt'),'a') as f:
             f.write(line+"\n")
 
-    def get_formants(self,filename,begin,end,nformants,ceiling):
-        output = self.run_script("formants-all.praat",[filename,begin,end,nformants,ceiling])
-        output = self.read_praat_out(output)
-        return output
-
     def extract_token(self,filename,begin,end,outname):
         out = self.run_script('extract.praat',[filename,begin,end,outname])
 
@@ -53,13 +62,12 @@ class PraatLoader:
         numbounds = boundaries.count(',')
         out = self.run_script('waveformPic.praat',[filename,numbounds,boundaries])
 
-    def run_script(self,name,args):
+    def run_script(self,name,*args):
         if self.debug:
             self.updatelog('%s' % name)
         com = [self.praat, os.path.join(self.script_dir,name)] + map(str,args)
         if self.debug:
             self.updatelog('%s' % str(com))
-            self.updatelog('%s' % str(map(type,com)))
         p = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
         stdout, stderr = p.communicate()
         if self.debug:
@@ -72,29 +80,35 @@ class PraatLoader:
         com = 'lame --preset insane %s' % filename
         subprocess.call(com,shell=True)
 
+
     def read_praat_out(self,text):
-        output = []
-        if text == '':
-            return output
+        if not text:
+            return None
         lines = text.splitlines()
-        head = lines.pop(0).split("\t")
+        head = lines.pop(0).split("\t")[1:]
+        output = {}
         for l in lines:
             if '\t' in l:
                 line = l.split("\t")
-                newline = {}
+                time = line.pop(0)
+                values = {}
                 for j in range(len(line)):
-                    newline[head[j]] = line[j]
-                output.append(newline)
+                    if line[j] != '--undefined--':
+                        v = float(line[j])
+                        if head[j].startswith('B'):
+                            v = math.log(v)
+                        values[head[j]] = v
+                if values:
+                    output[float(time)] = values
         return output
 
+
+
+
 if __name__ == '__main__':
-    p = PraatLoader('/home/michael/dev/LingToolsWebsite/Media/PraatScripts/',"/home/michael/dev/LingToolsWebsite/Media/Tools/praat")
-    #out = p.getFormants('/home/michael/dev/LingToolsWebsite/Media/Temp/Buckeye-41.wav', 0.0, 0.1, 5, 5000)
-    #print out
-    #for x in out:
-    #    print x
-    #fones = [x['F1(Hz)'] for x in out if x['F1(Hz)'] != '--undefined--']
-    #ftwos = [x['F2(Hz)'] for x in out if x['F2(Hz)'] != '--undefined--']
-    #print fones
+    #p = PraatLoader(praatpath='/home/michael/dev/Linguistics/Media/PraatScripts/')
+    #p.reinit_scripts()
+    p = PraatLoader()
+    print p.script_dir
 
 
