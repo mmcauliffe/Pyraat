@@ -109,6 +109,6 @@ if __name__ == '__main__':
     #p = PraatLoader(praatpath='/home/michael/dev/Linguistics/Media/PraatScripts/')
     #p.reinit_scripts()
     p = PraatLoader()
-    print p.script_dir
+    print(p.script_dir)
 
 
