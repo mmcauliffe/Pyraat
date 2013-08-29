@@ -7,7 +7,7 @@ Created on 2012-11-09
 import subprocess
 import os
 
-from scripts import praatscripts
+from praatinterface.scripts import praatscripts
 
 
 class PraatLoader:
