@@ -73,7 +73,7 @@ class PraatLoader:
         if self.debug:
             self.updatelog('stdout: %s' % str(stdout))
             self.updatelog('stderr: %s' % str(stderr))
-        return unicode(stdout)
+        return stdout.decode()
 
 
     def convert_MP3(self,filename):
