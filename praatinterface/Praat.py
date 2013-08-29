@@ -65,7 +65,7 @@ class PraatLoader:
     def run_script(self,name,*args):
         if self.debug:
             self.updatelog('%s' % name)
-        com = [self.praat, os.path.join(self.script_dir,name)] + map(str,args)
+        com = [self.praat, os.path.join(self.script_dir,name)] + list(map(str,args))
         if self.debug:
             self.updatelog('%s' % str(com))
         p = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
