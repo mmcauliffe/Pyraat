@@ -86,7 +86,6 @@ class PraatLoader:
             return None
         lines = text.splitlines()
         head = lines.pop(0)
-        print(head)
         head = head.split("\t")[1:]
         output = {}
         for l in lines:
