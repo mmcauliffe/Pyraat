@@ -1,23 +1,19 @@
-'''
-Created on 2012-11-09
 
-@author: michael
-'''
-
-import subprocess
+from subprocess import Popen, PIPE, call
 import os
 
 from praatinterface.scripts import praatscripts
 
-
 class PraatLoader:
-    def __init__(self,praatpath=None,debug=False,additional_scripts = {}):
-        self.debug=debug
+    def __init__(self, **kwargs):
+        praatpath = kwargs.pop('praatpath', None)
+
+        self.debug = kwargs.pop('debug',False)
         self.scripts = praatscripts
-        self.scripts.update(additional_scripts)
+        self.scripts.update(kwargs)
         if praatpath:
             self.script_dir = os.path.join(os.path.dirname(praatpath),'praatScripts')
-            self.praat = 'praat'
+            self.praat = praatpath
         else:
             self.script_dir = os.path.join(os.path.dirname(__file__),'praatScripts')
             self.praat = 'praat'
@@ -29,6 +25,8 @@ class PraatLoader:
 
     def reinit_scripts(self):
         for s in self.scripts:
+            if not s.lower().endswith('.praat'):
+                s += '.praat'
             if os.path.isfile(os.path.join(self.script_dir,s)):
                 os.remove(os.path.join(self.script_dir,s))
         os.rmdir(self.script_dir)
@@ -38,9 +36,12 @@ class PraatLoader:
         if not os.path.isdir(self.script_dir):
             os.mkdir(self.script_dir)
         for s in self.scripts:
-            if os.path.isfile(os.path.join(self.script_dir,s)):
+            sfilename = s
+            if not sfilename.lower().endswith('.praat'):
+                sfilename += '.praat'
+            if os.path.isfile(os.path.join(self.script_dir, sfilename)):
                 continue
-            with open(os.path.join(self.script_dir,s),'w') as f:
+            with open(os.path.join(self.script_dir, sfilename),'w') as f:
                 f.write(self.scripts[s])
 
     def initlog(self):
@@ -52,34 +53,47 @@ class PraatLoader:
             f.write(line+"\n")
 
     def extract_token(self,filename,begin,end,outname):
-        out = self.run_script('extract.praat',[filename,begin,end,outname])
+        out = self.run_script('extract.praat',[filename, begin, end, outname])
 
     def spectro_pic(self,filename,formantCheck,nformants,ceiling,boundaries):
         numbounds = boundaries.count(',')
-        out = self.run_script('spectroPic.praat',[filename,formantCheck,nformants,ceiling,numbounds,boundaries])
+        out = self.run_script('spectroPic.praat',[filename, formantCheck,
+                                                nformants, ceiling,
+                                                numbounds, boundaries])
 
-    def waveform_pic(self,filename,boundaries):
+    def waveform_pic(self,filename, boundaries):
         numbounds = boundaries.count(',')
-        out = self.run_script('waveformPic.praat',[filename,numbounds,boundaries])
+        out = self.run_script('waveformPic.praat',[filename, numbounds, boundaries])
 
-    def run_script(self,name,*args):
+    def run_script(self, name,*args):
         if self.debug:
             self.updatelog('%s' % name)
-        com = [self.praat, os.path.join(self.script_dir,name)] + list(map(str,args))
+        if not name.lower().endswith('.praat'):
+            name += '.praat'
+        com = [self.praat]
+        if self.praat.endswith('con.exe'):
+            com += ['-a']
+        com +=[os.path.join(self.script_dir,name)] + list(map(str,args))
         if self.debug:
             self.updatelog('%s' % str(com))
-        p = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
-        stdout, stderr = p.communicate()
-        if self.debug:
-            self.updatelog('stdout: %s' % str(stdout))
-            self.updatelog('stderr: %s' % str(stderr))
-        return stdout.decode()
+        with Popen(com, stdout=PIPE, stderr=PIPE, stdin=PIPE) as p:
+            try:
+                text = str(p.stdout.read().decode('latin'))
+                err = str(p.stderr.read().decode('latin'))
+            except UnicodeDecodeError:
+                if self.debug:
+                    self.updatelog('stdout: %s' % str(stdout))
+                    self.updatelog('stderr: %s' % str(stderr))
+        if err:
+            if self.debug:
+                self.updatelog('stdout: %s' % str(stdout))
+                self.updatelog('stderr: %s' % str(stderr))
 
+        return text.strip()
 
-    def convert_MP3(self,filename):
-        com = 'lame --preset insane %s' % filename
-        subprocess.call(com,shell=True)
-
+    #def convert_MP3(self, filename):
+    #    com = 'lame --preset insane %s' % filename
+    #    call(com,shell=True)
 
     def read_praat_out(self,text):
         if not text:
@@ -94,22 +108,18 @@ class PraatLoader:
                 time = line.pop(0)
                 values = {}
                 for j in range(len(line)):
-                    if line[j] != '--undefined--':
-                        v = float(line[j])
-                        if head[j].startswith('B'):
-                            v = math.log(v)
-                        values[head[j]] = v
+                    v = line[j]
+                    if v != '--undefined--':
+                        try:
+                            v = float(v)
+                        except ValueError:
+                            print(text)
+                            print(head)
+                    else:
+                        v = 0
+                    values[head[j]] = v
                 if values:
                     output[float(time)] = values
         return output
-
-
-
-
-if __name__ == '__main__':
-    #p = PraatLoader(praatpath='/home/michael/dev/Linguistics/Media/PraatScripts/')
-    #p.reinit_scripts()
-    p = PraatLoader()
-    print(p.script_dir)
 
 

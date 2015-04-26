@@ -1,160 +1,169 @@
 
 
 praatscripts = {
-'formants.praat':"""form Variables
-                        sentence filename
-                        real nformants
-                        real ceiling
-                    endform
+'formants':
+"""form Variables
+    sentence filename
+    real nformants
+    real ceiling
+endform
 
-                    Read from file... 'filename$'
+Read from file... 'filename$'
 
-                    To Formant (burg)... 0.001 'nformants' 'ceiling' 0.025 50
-                    frames = Get number of frames
+To Formant (burg)... 0.001 'nformants' 'ceiling' 0.025 50
+frames = Get number of frames
 
-                    output$ = "time"+tab$+"F1"+tab$+"B1"+tab$+"F2"+tab$+"B2"+newline$
+output$ = "time"+tab$+"F1"+tab$+"B1"+tab$+"F2"+tab$+"B2"+newline$
 
-                    for f from 1 to frames
-                        t = Get time from frame number... 'f'
-                        t$ = fixed$(t, 3)
-                        f1 = Get value at time... 1 't' Hertz Linear
-                        f1$ = fixed$(f1, 2)
-                        f2 = Get value at time... 2 't' Hertz Linear
-                        f2$ = fixed$(f2, 2)
-                        b1 = Get bandwidth at time... 1 't' Hertz Linear
-                        b1$ = fixed$(b1, 2)
-                        b2 = Get bandwidth at time... 2 't' Hertz Linear
-                        b2$ = fixed$(b2, 2)
-                        output$ = output$+t$+tab$+f1$+tab$+b1$+tab$+f2$+tab$+b2$+newline$
-                    endfor
+for f from 1 to frames
+    t = Get time from frame number... 'f'
+    t$ = fixed$(t, 3)
+    f1 = Get value at time... 1 't' Hertz Linear
+    f1$ = fixed$(f1, 2)
+    f2 = Get value at time... 2 't' Hertz Linear
+    f2$ = fixed$(f2, 2)
+    b1 = Get bandwidth at time... 1 't' Hertz Linear
+    b1$ = fixed$(b1, 2)
+    b2 = Get bandwidth at time... 2 't' Hertz Linear
+    b2$ = fixed$(b2, 2)
+    output$ = output$+t$+tab$+f1$+tab$+b1$+tab$+f2$+tab$+b2$+newline$
+endfor
 
-                    echo 'output$'""",
-'extract.praat':"""form Variables
-                        sentence filename
-                        real begin
-                        real end
-                        sentence outname
-                    endform
+echo 'output$'""",
 
-                    Read from file... 'filename$'
+'extract':
+"""form Variables
+    sentence filename
+    real begin
+    real end
+    sentence outname
+endform
 
-                    Extract part... 'begin' 'end' rectangular 1.0 0
+Read from file... 'filename$'
 
-                    Save as WAV file... 'outname$'""",
-'pitch.praat': """form Variables
-                      sentence filename
-                    endform
+Extract part... 'begin' 'end' rectangular 1.0 0
 
-                    Read from file... 'filename$'
+Save as WAV file... 'outname$'""",
 
-                    To Pitch (ac)... 0.001 75.0 15 yes 0.03 0.45 0.01 0.35 0.14 600.0
-                    frames = Get number of frames
+'pitch':
+"""form Variables
+    sentence filename
+endform
 
-                    output$ = "Time"+tab$+"Pitch"+newline$
+Read from file... 'filename$'
 
-                    for f from 1 to frames
-                        t = Get time from frame number... 'f'
-                        t$ = fixed$(t, 3)
-                        v = Get value in frame... 'f' Hertz
-                        v$ = fixed$(v, 2)
-                        output$ = output$+t$+tab$+v$+newline$
-                    endfor
+To Pitch (ac)... 0.001 75.0 15 yes 0.03 0.45 0.01 0.35 0.14 600.0
+frames = Get number of frames
 
-                    echo 'output$'""",
-'intensity.praat': """form Variables
-                      sentence filename
-                    endform
+output$ = "Time"+tab$+"Pitch"+newline$
 
-                    Read from file... 'filename$'
-                    To Intensity... 100 0.001 yes
+for f from 1 to frames
+    t = Get time from frame number... 'f'
+    t$ = fixed$(t, 3)
+    v = Get value in frame... 'f' Hertz
+    v$ = fixed$(v, 2)
+    output$ = output$+t$+tab$+v$+newline$
+endfor
 
-                    frames = Get number of frames
+echo 'output$'""",
 
-                    output$ = "time(s)"+tab$+"Intensity(dB)"+newline$
+'intensity':
+"""form Variables
+    sentence filename
+endform
 
-                    for f from 1 to frames
-                        t = Get time from frame number... 'f'
-                        t$ = fixed$(t, 3)
-                        v = Get value in frame... 'f'
-                        v$ = fixed$(v, 2)
-                        output$ = output$+t$+tab$+v$+newline$
-                    endfor
+Read from file... 'filename$'
+To Intensity... 100 0.001 yes
 
-                    echo 'output$'""",
-'spectroPic.praat':"""form Variables
-                        sentence filename
-                        boolean formants
-                        real nformants
-                        real ceiling
-                        real numBounds
-                        text boundaries
-                    endform
+frames = Get number of frames
 
+output$ = "time(s)"+tab$+"Intensity(dB)"+newline$
 
+for f from 1 to frames
+    t = Get time from frame number... 'f'
+    t$ = fixed$(t, 3)
+    v = Get value in frame... 'f'
+    v$ = fixed$(v, 2)
+    output$ = output$+t$+tab$+v$+newline$
+endfor
 
-                    Erase all
+echo 'output$'""",
 
-                    Read from file... 'filename$'
-                    outname$ = filename$ -".wav"+"-spectro.eps"
+'spectroPic':
+"""form Variables
+    sentence filename
+    boolean formants
+    real nformants
+    real ceiling
+    real numBounds
+    text boundaries
+endform
 
-                    name$ = selected$("Sound")
+Erase all
 
-                    dur = Get total duration
+Read from file... 'filename$'
+outname$ = filename$ -".wav"+"-spectro.eps"
 
-                    step = dur / 512
-                    Colour... black
-                    To Spectrogram... 0.005 'ceiling' 'step' 20 Gaussian
+name$ = selected$("Sound")
 
-                    Paint... 0.0 0.0 0.0 0.0 100 1 50.0 6.0 0.0 1
-                    bound$ = boundaries$
-                    for i from 1 to numBounds
-                        if index(bound$,",") = 0
-                            b$ = bound$
-                        else
-                        b$ = left$(bound$,index(bound$,",")-1)
-                        bound$ = right$(bound$,length(bound$)-index(bound$,","))
-                        endif
-                        Colour... blue
-                        Draw line... 'b$' 0 'b$' 'ceiling'
-                    endfor
+dur = Get total duration
 
-                    if formants = 1
-                        select Sound 'name$'
-                        To Formant (burg)... 0.0 'nformants' 'ceiling' 0.025 50
-                        Colour... red
-                        Speckle... 0.0 0.0 'ceiling' 30 1
-                        Draw tracks... 0.0 0.0 'ceiling' 1
-                    endif
+step = dur / 512
+Colour... black
+To Spectrogram... 0.005 'ceiling' 'step' 20 Gaussian
 
-                    Save as EPS file... 'outname$'""",
-'waveformPic.praat':"""form Variables
-                        sentence filename
-                        real numBounds
-                        text boundaries
-                    endform
+Paint... 0.0 0.0 0.0 0.0 100 1 50.0 6.0 0.0 1
+bound$ = boundaries$
+for i from 1 to numBounds
+    if index(bound$,",") = 0
+        b$ = bound$
+    else
+    b$ = left$(bound$,index(bound$,",")-1)
+    bound$ = right$(bound$,length(bound$)-index(bound$,","))
+    endif
+    Colour... blue
+    Draw line... 'b$' 0 'b$' 'ceiling'
+endfor
 
-                    outname$ = filename$-".wav"+"-waveform.eps"
+if formants = 1
+    select Sound 'name$'
+    To Formant (burg)... 0.0 'nformants' 'ceiling' 0.025 50
+    Colour... red
+    Speckle... 0.0 0.0 'ceiling' 30 1
+    Draw tracks... 0.0 0.0 'ceiling' 1
+endif
 
-                    printline 'numBounds'
-                    Erase all
+Save as EPS file... 'outname$'""",
 
-                    Read from file... 'filename$'
+'waveformPic':
+"""form Variables
+    sentence filename
+    real numBounds
+    text boundaries
+endform
 
-                    min = Get minimum... 0.0 0.0 None
+outname$ = filename$-".wav"+"-waveform.eps"
 
-                    max = Get maximum... 0.0 0.0 None
+printline 'numBounds'
+Erase all
 
-                    Draw... 0.0 0.0 0.0 0.0 1 Curve
-                    bound$ = boundaries$
-                    for i from 1 to numBounds
-                        if index(bound$,",") = 0
-                            b$ = bound$
-                        else
-                        b$ = left$(bound$,index(bound$,",")-1)
-                        bound$ = right$(bound$,length(bound$)-index(bound$,","))
-                        endif
-                        Colour... blue
-                        Draw line... 'b$' 'min' 'b$' 'max'
-                    endfor
-                    Save as EPS file... 'outname$'"""
-                }
+Read from file... 'filename$'
+
+min = Get minimum... 0.0 0.0 None
+
+max = Get maximum... 0.0 0.0 None
+
+Draw... 0.0 0.0 0.0 0.0 1 Curve
+bound$ = boundaries$
+for i from 1 to numBounds
+    if index(bound$,",") = 0
+        b$ = bound$
+    else
+    b$ = left$(bound$,index(bound$,",")-1)
+    bound$ = right$(bound$,length(bound$)-index(bound$,","))
+    endif
+    Colour... blue
+    Draw line... 'b$' 'min' 'b$' 'max'
+endfor
+Save as EPS file... 'outname$'"""
+}
