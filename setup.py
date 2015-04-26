@@ -19,7 +19,7 @@ class PyTest(TestCommand):
             sys.exit(errcode)
 setup(
     name = 'python-praat-scripts',
-    version = '0.2.0',
+    version = '0.2.1',
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python',
