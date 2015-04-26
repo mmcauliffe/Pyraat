@@ -1,5 +1,6 @@
 language: python
 python:
+  - 2.7
   - 3.3
   - 3.4
 branches:
@@ -29,14 +30,14 @@ before_install:
   - popd
 # Install packages
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy scikit-learn networkx matplotlib nose pytest
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION pytest
   # Coverage packages are on my binstar channel
   - pip install -q coveralls coverage
   - python setup.py install
 
 # Run test
 script:
-  - "coverage run --source=acousticsim setup.py test"
+  - "coverage run --source=praatinterface setup.py test"
 
 # Calculate coverage
 after_success:
