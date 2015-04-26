@@ -76,20 +76,12 @@ class PraatLoader:
         com +=[os.path.join(self.script_dir,name)] + list(map(str,args))
         if self.debug:
             self.updatelog('%s' % str(com))
-        with Popen(com, stdout=PIPE, stderr=PIPE, stdin=PIPE) as p:
-            try:
-                text = str(p.stdout.read().decode('latin'))
-                err = str(p.stderr.read().decode('latin'))
-            except UnicodeDecodeError:
-                if self.debug:
-                    self.updatelog('stdout: %s' % str(stdout))
-                    self.updatelog('stderr: %s' % str(stderr))
-        if err:
-            if self.debug:
-                self.updatelog('stdout: %s' % str(stdout))
-                self.updatelog('stderr: %s' % str(stderr))
-
-        return text.strip()
+        p = Popen(com,stdout = PIPE,stderr = PIPE,stdin = PIPE)
+        stdout, stderr = p.communicate()
+        if self.debug:
+            self.updatelog('stdout: %s' % str(stdout))
+            self.updatelog('stderr: %s' % str(stderr))
+        return stdout.decode().strip()
 
     #def convert_MP3(self, filename):
     #    com = 'lame --preset insane %s' % filename
