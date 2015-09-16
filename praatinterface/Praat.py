@@ -73,6 +73,8 @@ class PraatLoader:
         com = [self.praat]
         if self.praat.endswith('con.exe'):
             com += ['-a']
+        elif self.praat.endswith('.app'):
+            com[0] = os.path.join(self.praat, 'Contents', 'MacOS', 'Praat')
         com +=[os.path.join(self.script_dir,name)] + list(map(str,args))
         if self.debug:
             self.updatelog('%s' % str(com))
