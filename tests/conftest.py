@@ -13,6 +13,6 @@ def sound_file(test_dir):
 @pytest.fixture(scope='module')
 def praatpath():
     if os.environ.get('TRAVIS'):
-        return '$HOME/downloads/praat'
+        return '$HOME/tools/praat'
     return r'C:\Users\michael\Documents\Praat\praatcon.exe'
 
