@@ -13,6 +13,9 @@ sudo: false
 # Install packages
 install:
   - bash continuous-integration/travis/install.sh
+  - source activate "test-environment$TRAVIS_PYTHON_VERSION"
+  - which python
+  - conda list
 
 # Run test
 script:
