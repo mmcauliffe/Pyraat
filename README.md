@@ -3,6 +3,7 @@ python-praat-scripts
 
 [![Build Status](https://travis-ci.org/mmcauliffe/python-praat-scripts.svg?branch=master)](https://travis-ci.org/mmcauliffe/python-praat-scripts)
 [![Coverage Status](https://coveralls.io/repos/mmcauliffe/python-praat-scripts/badge.svg)](https://coveralls.io/r/mmcauliffe/python-praat-scripts)
+[![PyPI version](https://badge.fury.io/py/python-praat-scripts.svg)](https://badge.fury.io/py/python-praat-scripts)
 
 Interface for running Praat scripts through Python
 
