@@ -11,8 +11,11 @@ notifications:
 sudo: false
 
 # Install packages
-install:
+before_install:
   - bash continuous-integration/travis/install.sh
+
+install:
+  - export PATH="$HOME/miniconda/miniconda/bin:$PATH"
   - source activate "test-environment$TRAVIS_PYTHON_VERSION"
   - which python
   - conda list
