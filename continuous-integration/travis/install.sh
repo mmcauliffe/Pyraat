@@ -10,8 +10,8 @@ if [ ! -d "$HOME/miniconda/miniconda/envs/test-environment" ]; then
   conda config --set always_yes yes --set changeps1 no
   conda update -q conda
   conda info -a
-  conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytest setuptools
-  source activate test-environment
+  conda create -q -n "test-environment$TRAVIS_PYTHON_VERSION" python=$TRAVIS_PYTHON_VERSION pytest setuptools
+  source activate "test-environment$TRAVIS_PYTHON_VERSION"
   which python
   pip install -q coveralls coverage
 else
