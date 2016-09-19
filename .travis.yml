@@ -8,11 +8,7 @@ branches:
 notifications:
   email: false
 
-# Setup anaconda
-before_install:
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
+sudo: false
 
 # Install packages
 install:
@@ -30,4 +26,3 @@ cache:
   directories:
     - $HOME/downloads
     - $HOME/miniconda
-  apt: true

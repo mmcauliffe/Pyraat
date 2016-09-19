@@ -18,9 +18,18 @@ else
   echo "Miniconda already installed."
 fi
 
-if [ ! -f $HOME/downloads/praat.tar.gz ]; then
-  mkdir -p $HOME/downloads
-  curl -L -o $HOME/downloads/praat.tar.gz http://www.fon.hum.uva.nl/praat/praat5408_linux64.tar.gz;
+if [ ! -f "$HOME/tools/praat" ]; then
   cd $HOME/downloads
-  tar -zxvf praat.tar.gz --keep-newer-files
+  #FOR WHEN TRAVIS UPDATES TO A NEWER UBUNTU
+  #latestVer=$(curl -s 'http://www.fon.hum.uva.nl/praat/download_linux.html' |
+  # grep -Eo 'praat[0-9]+_linux64\.tar\.gz' | head -1)
+
+  # Download.
+  #curl "http://www.fon.hum.uva.nl/praat/${latestVer}" > praat-latest.tar.gz
+  #tar -zxvf praat-latest.tar.gz
+  wget http://www.fon.hum.uva.nl/praat/old/5412/praat5412_linux64.tar.gz
+  tar -zxvf praat5412_linux64.tar.gz
+  mv praat $HOME/tools/praat
+else
+  echo "Praat already installed."
 fi
