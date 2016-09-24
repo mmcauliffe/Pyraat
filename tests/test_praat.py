@@ -17,4 +17,11 @@ def test_basic(praatpath):
     text = pl.run_script('basic')
     assert(text == 'hello')
 
+def test_another_praatloader(praatpath):
+    basic_script = 'echo hello'
 
+    pl = PraatLoader(praatpath = praatpath, basic = basic_script, debug = True)
+    pl.reinit_scripts()
+
+    pl2 = PraatLoader(praatpath = praatpath, basic2 = basic_script, debug = True)
+    pl2.reinit_scripts()
