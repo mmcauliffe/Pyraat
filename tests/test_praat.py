@@ -1,20 +1,40 @@
-
 import pytest
+import os
 
-from praatinterface import PraatLoader
-
-def test_formants(praatpath, sound_file):
-    pl = PraatLoader(praatpath = praatpath, debug = True)
-    text = pl.run_script('formants.praat',sound_file, 5, 5500)
-
-    formants = pl.read_praat_out(text)
-
-def test_basic(praatpath):
-    basic_script = 'echo hello'
-
-    pl = PraatLoader(praatpath = praatpath, basic = basic_script, debug = True)
-
-    text = pl.run_script('basic')
-    assert(text == 'hello')
+from pyraat.praat_script import inspect_praat_script
+from pyraat.exceptions import PraatScriptNoOutputError, PraatScriptMultipleOutputError, PraatScriptInvalidArgumentError
 
 
+def test_check_praat_script(praat_script_test_dir):
+    uses_long, point_measure, num_args = inspect_praat_script(os.path.join(praat_script_test_dir, 'COG.praat'))
+    assert not uses_long
+    assert point_measure
+    assert num_args == 0
+
+    uses_long, point_measure, num_args = inspect_praat_script(os.path.join(praat_script_test_dir, 'formants.praat'))
+    assert not uses_long
+    assert not point_measure
+    assert num_args == 4
+
+    uses_long, point_measure, num_args = inspect_praat_script(
+        os.path.join(praat_script_test_dir, 'multiple_formants_bandwidth_segment.praat'))
+    assert uses_long
+    assert point_measure
+    assert num_args == 6
+
+    uses_long, point_measure, num_args = inspect_praat_script(os.path.join(praat_script_test_dir, 'COG_long.praat'))
+    assert uses_long
+    assert point_measure
+    assert num_args == 0
+
+    with pytest.raises(PraatScriptNoOutputError):
+        inspect_praat_script(os.path.join(praat_script_test_dir, 'no_output_script.praat'))
+
+    with pytest.raises(PraatScriptMultipleOutputError):
+        inspect_praat_script(os.path.join(praat_script_test_dir, 'multiple_output_script.praat'))
+
+    with pytest.raises(PraatScriptInvalidArgumentError):
+        inspect_praat_script(os.path.join(praat_script_test_dir, 'invalid_reg_script.praat'))
+
+    with pytest.raises(PraatScriptInvalidArgumentError):
+        inspect_praat_script(os.path.join(praat_script_test_dir, 'invalid_long_script.praat'))

@@ -1,9 +1,9 @@
-python-praat-scripts
-====================
+Pyraat
+======
 
-[![Build Status](https://travis-ci.org/mmcauliffe/python-praat-scripts.svg?branch=master)](https://travis-ci.org/mmcauliffe/python-praat-scripts)
-[![Coverage Status](https://coveralls.io/repos/mmcauliffe/python-praat-scripts/badge.svg)](https://coveralls.io/r/mmcauliffe/python-praat-scripts)
-[![PyPI version](https://badge.fury.io/py/python-praat-scripts.svg)](https://badge.fury.io/py/python-praat-scripts)
+[![Build Status](https://travis-ci.org/mmcauliffe/python-praat-scripts.svg?branch=master)](https://travis-ci.org/mmcauliffe/pyraat)
+[![Coverage Status](https://coveralls.io/repos/mmcauliffe/python-praat-scripts/badge.svg)](https://coveralls.io/r/mmcauliffe/pyraat)
+[![PyPI version](https://badge.fury.io/py/python-praat-scripts.svg)](https://badge.fury.io/py/pyraat)
 [![DOI](https://zenodo.org/badge/7311987.svg)](https://zenodo.org/badge/latestdoi/7311987)
 
 Interface for running Praat scripts through Python
@@ -14,7 +14,7 @@ Installation
 You can install python-praat-scripts through pip via:
 
 ```
-pip install python-praat-scripts
+pip install pyraat
 ```
 
 Or through downloading this repository and running:
@@ -23,48 +23,4 @@ Or through downloading this repository and running:
 python setup.py install
 ```
 
-Once installed, the `praatinterface` package will be importable.
-
-Use
-===
-
-This package allows users to specify Praat scripts in Python code (as strings),
-which can be called through a PraatLoader object, which can parse the output
-to something more useable than plain text.  There are several predefined
-scripts included in the loader.
-
-For basic usage, instantiate a PraatLoader object as below:
-
-```
-from praatinterface import PraatLoader
-
-pl = PraatLoader(praatpath = '/path/to/praat')
-
-text = pl.run_script('formants.praat', '/path/to/wav/file', 5, 5500)
-
-formants = pl.read_praat_out(text)
-```
-
-The result of running the formants script gives the first two formants estimated by
-Praat in the wav file specified, as a list of dictionaries with keys for
-Time, F1, B1, F2, and B2.
-
-The full list of scripts prewritten in this module are in `praatinterface.scripts.py`.
-
-User-specified scripts can be given via keyword arguments to the PraatLoader class.
-
-```
-from praatinterface import PraatLoader
-
-basic_script = 'echo hello'
-
-pl = PraatLoader(praatpath = '/path/to/praat', basic = basic_script)
-
-text = pl.run_script('basic')
-```
-
-For the above code, text should equal 'hello'.
-
-
-Scripts that need to return some value should use the Praat function `echo`
-which will be sent to the Python process.
+Once installed, the `pyraat` package will be importable.
