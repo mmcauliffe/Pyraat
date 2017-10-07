@@ -73,8 +73,6 @@ class PraatAnalysisFunction(object):
     def __init__(self, praat_script_path, praat_path=None, arguments=None):
         if praat_path is None:
             praat_path = 'praat'
-            if sys.platform == 'win32':
-                praat_path += 'con.exe'
         if arguments is None:
             arguments = []
         self.arguments = arguments

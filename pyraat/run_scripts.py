@@ -1,4 +1,5 @@
 import os
+import sys
 from subprocess import Popen, PIPE
 import re
 
@@ -7,10 +8,11 @@ from .exceptions import PraatError
 
 def run_script(praat_path, script_path, *args):
     com = [praat_path]
-    if praat_path.endswith('con.exe'):
+    if sys.platform == 'win32':
         com += ['-a']
     com += ['--run']
     com += [script_path] + list(map(str, args))
+    print(' '.join(com))
     err = ''
     text = ''
     with Popen(com, stdout=PIPE, stderr=PIPE, stdin=PIPE) as p:

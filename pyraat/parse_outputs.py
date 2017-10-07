@@ -23,7 +23,7 @@ def parse_point_script_output(script_output):
     unexpected_input = False
     for line in script_output.split('\n'):
         if line.strip() is not "" and line.strip() is not "." and "Warning" not in line and "warning" not in line:
-            values = line.strip().split(" ")
+            values = line.strip().split()
             if not headers:
                 headers = values
             else:
@@ -75,7 +75,7 @@ def parse_track_script_output(text):
                         print(text)
                         print(head)
                 else:
-                    v = 0
+                    v = None
                 values[head[j]] = v
             if values:
                 output[float(time)] = values
