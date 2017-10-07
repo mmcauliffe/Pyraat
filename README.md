@@ -12,16 +12,10 @@ Interface for running Praat scripts through Python
 Installation
 ============
 
-You can install python-praat-scripts through pip via:
+You can install Pyraat through pip via:
 
 ```
 pip install pyraat
-```
-
-Or through downloading this repository and running:
-
-```
-python setup.py install
 ```
 
 Once installed, the `pyraat` package will be importable.
