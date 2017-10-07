@@ -1,8 +1,8 @@
 Pyraat
 ======
 
-[![Build Status](https://travis-ci.org/mmcauliffe/python-praat-scripts.svg?branch=master)](https://travis-ci.org/mmcauliffe/pyraat)
-[![Coverage Status](https://coveralls.io/repos/mmcauliffe/python-praat-scripts/badge.svg)](https://coveralls.io/r/mmcauliffe/pyraat)
+[![Build Status](https://travis-ci.org/mmcauliffe/Pyraat.svg?branch=master)](https://travis-ci.org/mmcauliffe/Pyraat)
+[![Coverage Status](https://coveralls.io/repos/mmcauliffe/Pyraat/badge.svg)](https://coveralls.io/r/mmcauliffe/Pyraat)
 [![Documentation Status](https://readthedocs.org/projects/pyraat/badge/?version=latest)](http://pyraat.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/python-praat-scripts.svg)](https://badge.fury.io/py/pyraat)
 [![DOI](https://zenodo.org/badge/7311987.svg)](https://zenodo.org/badge/latestdoi/7311987)
