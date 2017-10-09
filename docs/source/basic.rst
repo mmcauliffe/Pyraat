@@ -24,7 +24,7 @@ The ``praat_path`` argument can be omitted if ``praat`` is available on the syst
 
 .. note::
 
-   The above snippet assumes a script that analyzes a whole file.  See XXX for more information on the types of Praat scripts.
+   The above snippet assumes a script that analyzes a whole file.  See :ref:`praat_script_types` for more information on the types of Praat scripts.
 
 Arguments to the Praat script that are constant over multiple evaluations on wav files:
 

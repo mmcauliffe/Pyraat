@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   basic.rst
+   praat_script_types.rst
+
 
 
 Indices and tables
