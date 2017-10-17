@@ -12,7 +12,6 @@ def run_script(praat_path, script_path, *args):
         com += ['-a']
     com += ['--run']
     com += [script_path] + list(map(str, args))
-    print(' '.join(com))
     err = ''
     text = ''
     with Popen(com, stdout=PIPE, stderr=PIPE, stdin=PIPE) as p:

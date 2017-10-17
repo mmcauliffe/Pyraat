@@ -28,11 +28,12 @@ class PraatScriptInvalidArgumentError(PraatParseError):
     def __init__(self, script_path, arguments, uses_long):
         if uses_long:
             msg = 'The script {} has invalid arguments. ' \
-                  'The first four arguments must specify: ' \
+                  'The first five arguments must specify: ' \
                   'the file name (sentence), ' \
                   'the beginning of the segment (real), ' \
                   'the end of the segment (real), ' \
-                  'and the channel of the segment (integer).' \
+                  'the channel of the segment (integer), ' \
+                  'and padding surrounding the segment. ' \
                   'The current first four arguments are: {}'.format(script_path, ', '.join(
                 '{} ({})'.format(*x) for x in arguments[:4]))
         else:

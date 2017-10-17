@@ -43,16 +43,16 @@ def inspect_praat_script(script_path):
         raise PraatScriptNoOutputError(script_path)
     valid_args = True
     if uses_long:
-        if len(arguments) < 4:
+        if len(arguments) < 5:
             valid_args = False
         for i, a in enumerate(arguments):
             if i == 0 and a[1] != 'sentence':
                 valid_args = False
-            elif i in [1, 2] and a[1] != 'real':
+            elif i in [1, 2, 4] and a[1] != 'real':
                 valid_args = False
             elif i == 3 and a[1] != 'integer':
                 valid_args = False
-        additional_args = len(arguments) - 4
+        additional_args = len(arguments) - 5
     else:
         if len(arguments) < 1:
             valid_args = False
@@ -82,7 +82,7 @@ class PraatAnalysisFunction(object):
         self.praat_script_path = praat_script_path
         self.uses_long, self.point_measure, self.num_args = inspect_praat_script(self.praat_script_path)
         if self.uses_long:
-            self.num_file_args = 4
+            self.num_file_args = 5
         else:
             self.num_file_args = 1
         if self.arguments and len(self.arguments) != self.num_args:

@@ -29,7 +29,7 @@ def test_check_praat_script_long(praat_script_test_dir):
         os.path.join(praat_script_test_dir, 'multiple_formants_bandwidth_segment.praat'))
     assert uses_long
     assert point_measure
-    assert num_args == 6
+    assert num_args == 5
 
     uses_long, point_measure, num_args = inspect_praat_script(os.path.join(praat_script_test_dir, 'COG_long.praat'))
     assert uses_long

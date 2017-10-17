@@ -64,8 +64,9 @@ Header
 ``````
 
 For analyzing one segment of a file, the following header is used to specify arguments.  The first four arguments are
-required, specifying the name of the sound file, the begin time of the segment of interest, its end time, and which channel
-to extract (for mono files, this will always be 0 in Python).
+required, specifying the name of the sound file, the begin time of the segment of interest, its end time, which channel
+to extract (for mono files, this will always be 0 in Python), and any padding to use surrounding the file (often helpful
+for algorithms that have long windows, such as pitch or intensity.
 
 .. code-block:: praat
 
@@ -74,6 +75,7 @@ to extract (for mono files, this will always be 0 in Python).
        real begin
        real end
        integer channel
+       real padding
        real measurement_point
        integer nformants
        real ceiling

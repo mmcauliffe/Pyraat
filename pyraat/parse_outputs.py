@@ -20,7 +20,6 @@ def parse_point_script_output(script_output):
     """
     headers = []
     output = {}
-    unexpected_input = False
     for line in script_output.split('\n'):
         if line.strip() is not "" and line.strip() is not "." and "Warning" not in line and "warning" not in line:
             values = line.strip().split()
@@ -28,21 +27,18 @@ def parse_point_script_output(script_output):
                 headers = values
             else:
                 for (measurement, value) in zip(headers, values):
-                    if value.replace('.', '').strip('-').isnumeric():
-                        if '.' in value:
-                            value = float(value)
-                        else:
-                            value = int(value)
+                    if value == '--undefined--':
+                        value = None
                     elif value.lower() == 'true':
                         value = True
                     elif value.lower() == 'false':
                         value = False
                     else:
-                        unexpected_input = True
-                        value = None
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            value = None
                     output[measurement] = value
-    if unexpected_input:
-        print('Praat output: ' + script_output)
     return output
 
 

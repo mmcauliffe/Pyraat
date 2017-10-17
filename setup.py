@@ -23,7 +23,7 @@ class PyTest(TestCommand):
 
 setup(
     name='pyraat',
-    version='0.3.0',
+    version='0.3.1',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python',

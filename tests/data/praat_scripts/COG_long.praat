@@ -3,6 +3,7 @@ form Choices
 	real begin
 	real end
 	integer channel
+	real padding
 endform
 
 from_percent = 0.25

@@ -4,6 +4,7 @@ form Variables
     real begin
     real end
     integer channel
+    real padding
     real measurement_point
     integer nformants
     real ceiling

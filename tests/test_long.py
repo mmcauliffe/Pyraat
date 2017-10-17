@@ -14,7 +14,7 @@ def test_long_track(praat_path, praat_script_test_dir, long_sound_file, iy_times
     assert func.uses_long
     assert func._output_parse_function == parse_track_script_output
 
-    output = func(long_sound_file, *iy_times, 0)
+    output = func(long_sound_file, *iy_times, 0, 0)
     print(output)
 
     header = ['F1', 'B1', 'F2', 'B2', 'F3', 'B3', 'F4', 'B4', 'F5', 'B5']
@@ -27,7 +27,7 @@ def test_long_track(praat_path, praat_script_test_dir, long_sound_file, iy_times
             assert isinstance(k2, str)
             assert isinstance(v2, (float, type(None)))
 
-    output = func(long_sound_file, *ih_times, 0)
+    output = func(long_sound_file, *ih_times, 0, 0)
     print(output)
 
     assert all(isinstance(x, float) for x in output.keys())
@@ -49,9 +49,9 @@ def test_long_formant_point(praat_path, praat_script_test_dir, long_sound_file, 
 
     header = ['F1', 'B1', 'F2', 'B2', 'F3', 'B3', 'F4', 'B4', 'F5', 'B5']
 
-    output = func(long_sound_file, *iy_times, 0, 0.33, 5, 5000)
+    output = func(long_sound_file, *iy_times, 0, 0, 0.33, 5, 5000)
     with pytest.raises(PraatError):
-        func(long_sound_file, 0, 0.33, 5, 5000)
+        func(long_sound_file, 0, 0, 0.33, 5, 5000)
     print(output)
     assert sorted(output.keys()) == sorted(header)
     for k, v in output.items():
@@ -60,7 +60,7 @@ def test_long_formant_point(praat_path, praat_script_test_dir, long_sound_file, 
     iy_F1 = output['F1']
     iy_F2 = output['F2']
 
-    output = func(long_sound_file, *ih_times, 0)
+    output = func(long_sound_file, *ih_times, 0, 0)
     print(output)
     assert sorted(output.keys()) == sorted(header)
     for k, v in output.items():
@@ -79,13 +79,13 @@ def test_long_multiple_output(praat_path, praat_script_test_dir, long_sound_file
 
     assert func.point_measure
     assert func.uses_long
-    output = func(long_sound_file, *s_times, 0)
+    output = func(long_sound_file, *s_times, 0, 0)
     assert sorted(output.keys()) == sorted(['peak', 'slope', 'cog', 'spread'])
     assert all(isinstance(x, float) for x in output.values())
 
     s_cog = output['cog']
 
-    output = func(long_sound_file, *sh_times, 0)
+    output = func(long_sound_file, *sh_times, 0, 0)
     assert sorted(output.keys()) == sorted(['peak', 'slope', 'cog', 'spread'])
     assert all(isinstance(x, float) for x in output.values())
 

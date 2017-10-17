@@ -4,6 +4,7 @@ form Variables
     real begin
     real end
     integer channel
+    real padding
     real timestep
     real windowlen
     integer nformants
