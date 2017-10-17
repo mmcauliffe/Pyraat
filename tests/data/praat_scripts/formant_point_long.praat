@@ -35,6 +35,9 @@ output$ = ""
 for i from 1 to nformants
     formNum$ = string$(i)
     output$ = output$ +tab$+ "F"+formNum$ + tab$ + "B" + formNum$
+    if i <> nformants
+        output$ = output$ + tab$
+    endif
 endfor
 output$ = output$ + newline$
 
@@ -45,7 +48,10 @@ for i from 1 to nformants
     formant$ = fixed$(formant, 2)
     bw = Get bandwidth at time... 'i' 't' Hertz Linear
     bw$ = fixed$(bw, 2)
-    output$ = output$ + tab$ + formant$ + tab$ + bw$
+    output$ = output$ + formant$ + tab$ + bw$
+    if i <> nformants
+        output$ = output$ + tab$
+    endif
 endfor
 
 
