@@ -3,7 +3,9 @@ class PyraatError(Exception):
 
 
 class PraatError(PyraatError):
-    pass
+    def __init__(self, command, error_output):
+        msg = "The command `{}` gave the following error output:\n\n{}".format(command, error_output)
+        super(PraatError, self).__init__(msg)
 
 
 class PraatParseError(PyraatError):

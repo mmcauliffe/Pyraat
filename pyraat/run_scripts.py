@@ -22,8 +22,6 @@ def run_script(praat_path, script_path, *args):
             print(p.stdout.read())
             print(p.stderr.read())
     if (err and not err.strip().startswith('Warning')) or not text:
-        print(com)
-        print(args)
-        raise (PraatError(err))
+        raise (PraatError(com, err))
     return text
 
