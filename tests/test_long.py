@@ -3,7 +3,7 @@ import pytest
 from pyraat import PraatAnalysisFunction
 
 from pyraat.parse_outputs import parse_track_script_output, parse_point_script_output
-from pyraat.exceptions import PraatError
+from pyraat.exceptions import PyraatError
 
 
 def test_long_track(praat_path, praat_script_test_dir, long_sound_file, iy_times, ih_times):
@@ -50,7 +50,7 @@ def test_long_formant_point(praat_path, praat_script_test_dir, long_sound_file, 
     header = ['F1', 'B1', 'F2', 'B2', 'F3', 'B3', 'F4', 'B4', 'F5', 'B5']
 
     output = func(long_sound_file, *iy_times, 0, 0, 0.33, 5, 5000)
-    with pytest.raises(PraatError):
+    with pytest.raises(PyraatError):
         func(long_sound_file, 0, 0, 0.33, 5, 5000)
     print(output)
     assert sorted(output.keys()) == sorted(header)

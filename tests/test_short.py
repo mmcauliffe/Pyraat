@@ -3,7 +3,7 @@ import pytest
 from pyraat import PraatAnalysisFunction
 
 from pyraat.parse_outputs import parse_track_script_output, parse_point_script_output
-from pyraat.exceptions import PraatError
+from pyraat.exceptions import PyraatError
 
 
 def test_short_formant_track(praat_path, praat_script_test_dir, vowel_sound_file):
@@ -36,7 +36,7 @@ def test_short_formant_point(praat_path, praat_script_test_dir, vowel_sound_file
 
     header = ['F1', 'B1', 'F2', 'B2', 'F3', 'B3', 'F4', 'B4', 'F5', 'B5']
     output = func(vowel_sound_file, 0.33, 5, 5000)
-    with pytest.raises(PraatError):
+    with pytest.raises(PyraatError):
         func(vowel_sound_file, 0, 0.33, 5, 5000)
     assert sorted(output.keys()) == sorted(header)
     for k, v in output.items():

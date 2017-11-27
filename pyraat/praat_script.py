@@ -5,7 +5,7 @@ import re
 from .run_scripts import run_script
 from .parse_outputs import parse_point_script_output, parse_track_script_output
 from .exceptions import PraatScriptInvalidArgumentError, PraatScriptMultipleOutputError, PraatScriptNoOutputError, \
-    PraatParseError, PraatError
+    PraatParseError, PyraatError
 
 
 def inspect_praat_script(script_path):
@@ -100,6 +100,6 @@ class PraatAnalysisFunction(object):
         elif len(args) == self.num_file_args + self.num_args:
             return self._output_parse_function(self._function(self.praat_path, self.praat_script_path, *args))
         else:
-            raise PraatError('The arguments {} should be either just the file-specific ones ({}) '
+            raise PyraatError('The arguments {} should be either just the file-specific ones ({}) '
                              'or all of the arguments in the script ({}).'.format(', '.join(map(str, args)),
                              self.num_file_args, self.num_file_args+self.num_args))
