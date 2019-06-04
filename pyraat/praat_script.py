@@ -69,7 +69,6 @@ def inspect_praat_script(script_path):
         if "MULTIPLE_TRACKS" in line:
             output_type = "multiple_track"
             break
-    print(output_type)
     return uses_long, output_type, additional_args
 
 
