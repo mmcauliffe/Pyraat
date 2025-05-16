@@ -1,4 +1,5 @@
 *.py[cod]
+pyraat/_version.py
 
 # C extensions
 *.so
