@@ -50,4 +50,9 @@ def ih_times():
 
 @pytest.fixture(scope='session')
 def praat_path():
-    return 'praat'
+    if sys.platform == 'win32':
+        return 'praat.exe'
+    elif sys.platform == 'darwin':
+        return '/Applications/Praat.app/Contents/MacOS/Praat'
+    else:
+        return os.environ.get('praat', 'praat')
