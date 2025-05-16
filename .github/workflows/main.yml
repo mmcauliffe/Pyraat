@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main repository
+      uses: actions/checkout@v3
+      with:
+        repository: mmcauliffe/Pyraat
+
+    - name: Download and set up Praat
+      run: |
+        wget https://github.com/praat/praat/releases/download/v6.4.21/praat6421_linux-intel64-barren.tar.gz -O praat.tar.gz
+        tar -xvzf praat.tar.gz
+        echo "praat=$(pwd)/praat_barren" >> $GITHUB_ENV
+
+    - name: Install required packages and run pytest
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install setuptools setuptools_scm pytest
+        pip install -e .
+        pytest

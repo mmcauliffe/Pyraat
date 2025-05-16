@@ -50,6 +50,4 @@ def ih_times():
 
 @pytest.fixture(scope='session')
 def praat_path():
-    if os.environ.get('TRAVIS'):
-        return os.path.join(os.environ.get('HOME'), 'tools', 'praat')
     return 'praat'
