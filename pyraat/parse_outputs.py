@@ -76,3 +76,25 @@ def parse_track_script_output(text):
             if values:
                 output[float(time)] = values
     return output
+
+def parse_multiple_tracks_script_output(text):
+    if not text:
+        return None
+    lines = text.splitlines()
+    final_output = {}
+    while lines:
+        header = tuple(lines.pop(0).strip().split('\t'))
+        tracks = lines.pop(0).strip().split('\t')
+        output = {t:[] for t in tracks}
+        l = lines.pop(0).strip()
+        while l and lines:
+            values = l.split('\t')
+            for t, v in zip(tracks, values):
+                if v == '--undefined--' or v == "'undefined'":
+                    v = None
+                else:
+                    v = float(v)
+                output[t].append(v)
+            l = lines.pop(0).strip()
+        final_output[header] = output
+    return final_output

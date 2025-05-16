@@ -3,7 +3,7 @@ import os
 import re
 
 from .run_scripts import run_script
-from .parse_outputs import parse_point_script_output, parse_track_script_output
+from .parse_outputs import parse_point_script_output, parse_track_script_output, parse_multiple_tracks_script_output
 from .exceptions import PraatScriptInvalidArgumentError, PraatScriptMultipleOutputError, PraatScriptNoOutputError, \
     PraatParseError, PyraatError
 
@@ -61,12 +61,15 @@ def inspect_praat_script(script_path):
         additional_args = len(arguments) - 1
     if not valid_args:
         raise PraatScriptInvalidArgumentError(script_path, arguments, uses_long)
-    point_measure = True
+    output_type = "point" 
     for line in script_body:
         if output_name in line:
             if "time" in line:
-                point_measure = False
-    return uses_long, point_measure, additional_args
+                output_type = "track"
+        if "MULTIPLE_TRACKS" in line:
+            output_type = "multiple_track"
+            break
+    return uses_long, output_type, additional_args
 
 
 class PraatAnalysisFunction(object):
@@ -80,7 +83,7 @@ class PraatAnalysisFunction(object):
         if not os.path.exists(praat_script_path):
             raise PraatParseError('The Praat script {} does not exist.'.format(praat_script_path))
         self.praat_script_path = praat_script_path
-        self.uses_long, self.point_measure, self.num_args = inspect_praat_script(self.praat_script_path)
+        self.uses_long, self.output_type, self.num_args = inspect_praat_script(self.praat_script_path)
         if self.uses_long:
             self.num_file_args = 5
         else:
@@ -89,10 +92,12 @@ class PraatAnalysisFunction(object):
             raise PraatParseError('The number of non-file specific arguments in the script '
                                   'do not match the number of arguments specified.')
         self._function = run_script
-        if not self.point_measure:
+        if self.output_type == "track":
             self._output_parse_function = parse_track_script_output
-        else:
+        elif self.output_type == "point":
             self._output_parse_function = parse_point_script_output
+        elif self.output_type == "multiple_track":
+            self._output_parse_function = parse_multiple_tracks_script_output
 
     def __call__(self, *args, **kwargs):
         if len(args) == self.num_file_args:
