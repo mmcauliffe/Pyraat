@@ -92,6 +92,7 @@ class PraatAnalysisFunction(object):
             raise PraatParseError('The number of non-file specific arguments in the script '
                                   'do not match the number of arguments specified.')
         self._function = run_script
+        self.point_measure = self.output_type == "point"
         if self.output_type == "track":
             self._output_parse_function = parse_track_script_output
         elif self.output_type == "point":
