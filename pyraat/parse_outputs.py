@@ -21,7 +21,7 @@ def parse_point_script_output(script_output):
     headers = []
     output = {}
     for line in script_output.split('\n'):
-        if line.strip() is not "" and line.strip() is not "." and "Warning" not in line and "warning" not in line:
+        if line.strip() != "" and line.strip() != "." and "Warning" not in line and "warning" not in line:
             values = line.strip().split()
             if not headers:
                 headers = values
@@ -54,7 +54,7 @@ def parse_track_script_output(text):
             print(text)
             raise
         if l.startswith('time'):
-            head = re.sub('[(]\w+[)]', '', l)
+            head = re.sub(r'[(]\w+[)]', '', l)
             head = head.split("\t")[1:]
     output = {}
     for l in lines:
