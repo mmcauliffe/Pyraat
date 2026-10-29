@@ -56,3 +56,13 @@ def test_short_cog(praat_path, praat_script_test_dir, vowel_sound_file):
     assert sorted(output.keys()) == ['cog']
     assert all(isinstance(x, float) for x in output.values())
 
+
+def test_short_arguments_with_form_comments(praat_path, praat_script_test_dir, vowel_sound_file):
+    # Arguments are accepted for a script whose form contains comments and a choice field
+    script_path = os.path.join(praat_script_test_dir, 'form_with_comments.praat')
+    func = PraatAnalysisFunction(script_path, praat_path, arguments=['weighted', 1])
+    assert func.point_measure
+    power_1 = func(vowel_sound_file)['cog']
+    func = PraatAnalysisFunction(script_path, praat_path, arguments=['weighted', 2])
+    power_2 = func(vowel_sound_file)['cog']
+    assert power_1 != power_2
