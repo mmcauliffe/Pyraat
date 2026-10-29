@@ -39,8 +39,11 @@ class PraatScriptInvalidArgumentError(PraatParseError):
                   'The current first four arguments are: {}'.format(script_path, ', '.join(
                 '{} ({})'.format(*x) for x in arguments[:4]))
         else:
+            if arguments:
+                current = 'The current first argument is: {} ({})'.format(*arguments[0])
+            else:
+                current = 'The script has no form, or its form declares no arguments.'
             msg = 'The script {} has invalid arguments. ' \
                   'The first argument must specify ' \
-                  'the file name (sentence). ' \
-                  'The current first argument is: {} ({})'.format(script_path, *arguments[0])
+                  'the file name (sentence). {}'.format(script_path, current)
         super(PraatScriptInvalidArgumentError, self).__init__(msg)
