@@ -1,3 +1,5 @@
+import codecs
+import io
 import sys
 import os
 import re
@@ -12,6 +14,21 @@ COMMENT_PREFIXES = ('#', '!', ';')
 NON_ARGUMENT_FIELDS = ('comment', 'option', 'button')
 
 
+def read_praat_script(script_path):
+    """Read a Praat script's text the way Praat reads text files.
+    """
+    with open(script_path, 'rb') as f:
+        data = f.read()
+    if data.startswith((codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)):
+        return data.decode('utf-16')
+    if data.startswith(codecs.BOM_UTF8):
+        return data.decode('utf-8-sig')
+    try:
+        return data.decode('utf-8')
+    except UnicodeDecodeError:
+        return data.decode('latin-1')
+
+
 def inspect_praat_script(script_path):
     arguments = []
     parsing_form = False
@@ -19,7 +36,7 @@ def inspect_praat_script(script_path):
     uses_long = False
     script_body = []
     output_name = None
-    with open(script_path, 'r', encoding='utf8') as f:
+    with io.StringIO(read_praat_script(script_path), newline=None) as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith(COMMENT_PREFIXES):
@@ -32,7 +49,7 @@ def inspect_praat_script(script_path):
                 if first_word not in NON_ARGUMENT_FIELDS:
                     t = line.split()
                     if len(t) < 2:
-                        raise PraatParseError('The Praat script {} has a field without a name: '
+                        raise PraatParseError('The form of the script {} has a field without a name: '
                                               '"{}"'.format(script_path, line))
                     arguments.append((t[1], first_word))
             elif not form_seen and first_word == 'form':
